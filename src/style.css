@@ -66,6 +66,14 @@ nav .button:hover {
     font-size: 1.2rem;
 }
 
+.add-item-heading i {
+    transition: all 0.2s ease;
+}
+
+.add-item-heading i:hover {
+    color: var(--accent-color);
+}
+
 nav .active {
     background-color: var(--accent-color);
     color: white;
@@ -107,3 +115,58 @@ main {
     color: var(--dark-grey);
 }
 
+#task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--aside-background-color);
+    padding: 16px;
+    align-items: center;
+}
+
+.task-item-left {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.task-item-right {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.task-item-right div {
+    display: flex;
+    gap: 10px;
+}
+
+.task-item button {
+    background-color: var(--aside-background-color);
+    padding: 5px 10px;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    border-radius: 5px;
+}
+
+.task-item button:hover {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.low {
+    border-left: 4px solid green;
+}
+
+.medium {
+    border-left: 4px solid orange;
+}
+
+.high {
+    border-left: 4px solid red;
+}

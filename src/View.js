@@ -40,7 +40,7 @@ const View = (() => {
         const editButton = button.querySelector('.edit');
         const deleteButton = button.querySelector('.delete');
 
-        //TODO: attach modals to edit and delete button here
+        //TODO: attach modals to edit and delete buttons here
 
         buttons.push(button);
         projectList.appendChild(button);
@@ -48,7 +48,36 @@ const View = (() => {
 
     //Add new task to DOM
     function addTask(task) {
+        const taskItem = document.createElement('div');
+        taskItem.classList.add('task-item');
+        taskItem.classList.add(task.priority);
+        taskItem.setAttribute('id', task.taskId);
+
+        taskItem.innerHTML = (
+            `<div class="task-item-left">
+                <input type="checkbox" disabled>
+                ${task.title}
+            </div>
+            <div class="task-item-right">
+                <button>Details</button>
+                ${task.dueDate}
+                <div>
+                    <i class="bi bi-pencil-square edit"></i>
+                    <i class="bi bi-trash delete"></i>
+                </div>
+            </div>`
+        );
+
+        const checkbox = taskItem.querySelector('input');
+        checkbox.checked = task.completed;
         
+        const detailsButton = taskItem.querySelector('button');
+        const editButton = taskItem.querySelector('.edit');
+        const deleteButton = taskItem.querySelector('.delete');
+
+        //TODO: attach modals to details, edit and delete buttons here
+
+        taskList.appendChild(taskItem);
     }
 
     return {
