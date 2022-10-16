@@ -1,6 +1,4 @@
 import './style.css';
-import Project from './types/Project';
-import Task from './types/Task';
 import View from './View';
 import Storage from './Storage';
 
@@ -11,8 +9,6 @@ function init() {
 
     const projects = Storage.getProjects();
     projects.forEach(project => View.addProject(project));
-
-    View.addTask(new Task(1, 'Learn Angular', '', 'medium', '02-05-2022'));
 }
 
 init();

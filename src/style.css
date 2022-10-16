@@ -54,6 +54,7 @@ nav .button {
 
 nav .button:hover {
     border: 1px solid var(--accent-color);
+    cursor: pointer;
 }
 
 .add-item-heading {
@@ -67,7 +68,7 @@ nav .button:hover {
 }
 
 .add-item-heading i {
-    transition: all 0.2s ease;
+    transition: all 0.2s ease-in-out;
 }
 
 .add-item-heading i:hover {
@@ -83,7 +84,7 @@ nav .button i {
     margin-right: 10px;
 }
 
-.container {
+.task-list-container {
     width: clamp(600px, 80%, 1000px);
 }
 
@@ -104,7 +105,7 @@ main {
 }
 
 .edit, .delete {
-    transition: all 0.2s ease;
+    transition: all 0.2s ease-in-out;
 }
 
 .edit:hover, .delete:hover {
@@ -152,6 +153,7 @@ main {
     border: 1px solid var(--accent-color);
     color: var(--accent-color);
     border-radius: 5px;
+    transition: all 0.2s ease-in-out;
 }
 
 .task-item button:hover {
@@ -169,4 +171,94 @@ main {
 
 .high {
     border-left: 4px solid red;
+}
+
+.modal {
+    left: 50%;
+    transform: translateX(-50%);
+    top: 200px;
+    width: 400px;
+    border: none;
+    box-shadow: 0 0 4px 0 var(--dark-grey);
+    border-radius: 5px;
+}
+
+.modal-header {
+    background: linear-gradient(90deg, rgba(255,130,0,1) 0%, rgba(231,176,0,1) 50%, rgba(255,224,0,1) 100%);
+    display: flex;
+    color: white;
+    padding: 16px;
+    align-items: center;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.modal-header i {
+    font-size: 1.2rem;
+}
+
+i:hover {
+    cursor: pointer;
+}
+
+.modal form {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    color: var(--dark-grey);
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.modal form input {
+    padding: 10px 8px;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+    outline: none;
+    color: var(--dark-grey);
+    font-size: 1.05rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.modal form input:focus {
+    border-color: var(--accent-color);
+}
+
+.form-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+}
+
+.form-buttons button {
+    padding: 10px 12px;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+}
+
+.form-buttons button:hover, .task-item {
+    cursor: pointer;
+}
+
+.cancel-button {
+    color: var(--dark-grey)
+}
+
+.cancel-button:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.form-buttons .submit-button {
+    border-color: var(--accent-color);
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.form-buttons .submit-button:hover {
+    background-color: #e97100;
+    border-color: #e97100;
 }

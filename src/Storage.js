@@ -20,7 +20,9 @@ export default class Storage {
     }
 
     static addProject(project) {
-        const projects = this.getProjects().push(project);
+        const projects = this.getProjects();
+        projects.push(project);
+
         localStorage.setItem('projects', JSON.stringify(projects));
     }
 
@@ -33,7 +35,9 @@ export default class Storage {
     }
 
     static addTask(task) {
-        const tasks = this.getTasks().push(task);
+        const tasks = this.getTasks();
+        tasks.push(task);
+        
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
 
