@@ -25,8 +25,11 @@ export default class Storage {
     }
 
     static deleteProject(id) {
-        const projects = this.getProjects().filter(project => project.id != id);
+        const projects = this.getProjects().filter(project => project.projectId != id);
         localStorage.setItem('projects', JSON.stringify(projects));
+
+        const tasks = this.getTasks().filter(task => task.projectId != id);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
     }
 
     static addTask(task) {
@@ -35,7 +38,7 @@ export default class Storage {
     }
 
     static deleteTask(id) {
-        const tasks = this.getTasks().filter(task => task.id != id);
+        const tasks = this.getTasks().filter(task => task.taskId != id);
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
 }

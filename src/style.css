@@ -69,8 +69,9 @@ nav .active {
     color: white;
 }
 
-nav i {
+nav .button i {
     margin-right: 10px;
+    pointer-events: none;
 }
 
 .container {
@@ -82,4 +83,8 @@ main {
     justify-content: center;
     padding: 0 20px;
     color: var(--dark-grey);
+}
+
+.hidden {
+    display: none;
 }

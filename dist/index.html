@@ -14,22 +14,26 @@
     </header>
 
     <nav>
-        <div class="button active"><i class="bi bi-calendar3"></i>All</div>
-        <div class="button"><i class="bi bi-calendar3-event"></i>Today</div>
-        <div class="button"><i class="bi bi-calendar3-week"></i>Week</div>
+        <div id="view-all-button" class="button active"><i class="bi bi-calendar3"></i>All</div>
+        <div id="view-today-button" class="button"><i class="bi bi-calendar3-event"></i>Today</div>
+        <div id="view-week-button" class="button"><i class="bi bi-calendar3-week"></i>Week</div>
 
         <div class="add-item-heading">
             <p>Projects</p>
             <i class="bi bi-plus-circle"></i>
         </div>
+
+        <div id="project-list"></div>
     </nav>
 
     <main>
         <div class="container">
             <div class="add-item-heading">
                 <p>Tasks</p>
-                <i class="bi bi-plus-circle" id="add-task-button"></i>
+                <i class="bi bi-plus-circle hidden" id="add-task-button"></i>
             </div>
+
+            <div id="task-list"></div>
         </div>
     </main>
 </body>
