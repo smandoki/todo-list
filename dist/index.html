@@ -51,5 +51,21 @@
             </div>
         </form>
     </dialog>
+
+    <dialog class="modal" id="edit-project-modal">
+        <h2 class="modal-header">Edit Project</h2>
+
+        <form method="dialog" autocomplete="off" id="edit-project-form">
+            <input type="text" id="projectId" hidden>
+
+            <label for="title">Title</label>
+            <input type="text" name="title" required>
+
+            <div class="form-buttons">
+                <button class="cancel-button">Cancel</button>
+                <button class="submit-button" type="submit">Edit</button>
+            </div>
+        </form>
+    </dialog>
 </body>
 </html>

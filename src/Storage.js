@@ -37,12 +37,20 @@ export default class Storage {
     static addTask(task) {
         const tasks = this.getTasks();
         tasks.push(task);
-        
+
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
 
     static deleteTask(id) {
         const tasks = this.getTasks().filter(task => task.taskId != id);
         localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    static editProject(id, title) {
+        const projects = this.getProjects();
+        const index = projects.findIndex(project => project.projectId === id);
+
+        projects[index].title = title;
+        localStorage.setItem('projects', JSON.stringify(projects));
     }
 }

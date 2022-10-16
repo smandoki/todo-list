@@ -9,6 +9,8 @@ const View = (() => {
     const projectList = document.querySelector('#project-list');
     const taskList = document.querySelector('#task-list');
     const viewAllButton = document.querySelector('#view-all-button');
+    const editProjectModal = document.querySelector('#edit-project-modal');
+    const editProjectForm = document.querySelector('#edit-project-form');
 
     //Allow nav buttons to set active status onclick
     //and make main nav buttons hide add-task button
@@ -27,6 +29,7 @@ const View = (() => {
     function addProject(project) {
         const button = document.createElement('div');
         button.setAttribute('class', 'project button');
+        button.setAttribute('id', project.projectId);
 
         button.innerHTML = (
             `${project.title}
@@ -44,11 +47,19 @@ const View = (() => {
         const editButton = button.querySelector('.edit');
         const deleteButton = button.querySelector('.delete');
 
-        //TODO: attach modals to edit and delete buttons here
+        editButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+
+            editProjectForm.projectId.value = project.projectId;
+            editProjectForm.title.value = project.title;
+
+            editProjectModal.showModal();
+        });
+        
         deleteButton.addEventListener('click', (e) => {
+            e.stopPropagation();
             Storage.deleteProject(project.projectId);
             button.parentElement.removeChild(button);
-            e.stopPropagation();
             viewAllButton.click();
         });
 
@@ -61,6 +72,7 @@ const View = (() => {
         const taskItem = document.createElement('div');
         taskItem.classList.add('task-item');
         taskItem.classList.add(task.priority);
+        taskItem.setAttribute('id', task.taskId);
 
         taskItem.innerHTML = (
             `<div class="task-item-left">
@@ -93,8 +105,8 @@ const View = (() => {
     //handle opening and closing of add-project modal
     const addProjectModal = document.querySelector('#add-project-modal');
     const addProjectButton = document.querySelector('#add-project-button');
-    const cancelButton = addProjectModal.querySelector('.cancel-button');
 
+    let cancelButton = addProjectModal.querySelector('.cancel-button');
     cancelButton.addEventListener('click', () => addProjectModal.close());
 
     addProjectButton.addEventListener('click', () => {
@@ -114,6 +126,25 @@ const View = (() => {
         View.addProject(project);
 
         addProjectForm.reset();
+    });
+
+    //edit-project modal
+    cancelButton = editProjectModal.querySelector('.cancel-button');
+    cancelButton.addEventListener('click', () => editProjectModal.close());
+
+    editProjectModal.addEventListener('click', e => {
+        closeModal(e, editProjectModal);
+    });
+
+    editProjectForm.addEventListener('submit', () => {
+        const projectId = editProjectForm.projectId.value;
+        const title = editProjectForm.title.value;
+        
+        Storage.editProject(projectId, title);
+
+        projectList.innerHTML = '';
+        const projects = Storage.getProjects();
+        projects.forEach(project => addProject(project));
     });
 
     function closeModal(e, modal) {
