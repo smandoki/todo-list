@@ -1,1 +1,1 @@
-const root = document.querySelector('#root');
+import './style.css'
