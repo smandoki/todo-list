@@ -33,6 +33,10 @@ header i {
     font-size: 2rem;
 }
 
+.checkbox {
+    pointer-events: none;
+}
+
 nav {
     background-color: var(--aside-background-color);
     padding: 40px 20px;
