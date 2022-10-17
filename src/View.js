@@ -1,7 +1,6 @@
 import Storage from './Storage';
 import Project from './types/Project';
 import Task from './types/Task';
-import moment from 'moment/moment';
 
 const View = (() => {
 
@@ -354,12 +353,12 @@ const View = (() => {
     });
 
     viewWeekButton.addEventListener('click', () => {
-        const currentDate = moment();
+        const currentDate = new Date();
 
         const tasks = Storage.getTasks().filter(task => {
-            const date = moment(task.dueDate);
+            const date = new Date(task.dueDate);
 
-            return date.isSame(currentDate, 'week');
+            return date.getTime() < currentDate.getTime() + (7 * 24 * 60 * 60 * 1000);
         });
 
         taskList.innerHTML = '';
