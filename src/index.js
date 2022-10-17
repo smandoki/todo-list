@@ -8,7 +8,7 @@ function init() {
     tasks.forEach(task => View.addTask(task));
 
     const projects = Storage.getProjects();
-    projects.forEach(project => View.addProject(project));
+    projects.forEach(project => View.addProject(project, false));
 }
 
 init();

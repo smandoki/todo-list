@@ -14,6 +14,8 @@ const View = (() => {
     const deleteProjectForm = document.querySelector('#delete-project-form');
     const deleteProjectModal = document.querySelector('#delete-project-modal');
     const addTaskForm = document.querySelector('#add-task-form');
+    const taskDetailsModal = document.querySelector('#task-details-modal');
+    const taskDetailsForm = document.querySelector('#task-details-form');
 
     //Allow nav buttons to set active status onclick
     //and make main nav buttons hide add-task button
@@ -29,7 +31,7 @@ const View = (() => {
 
 
     //Add new project to DOM
-    function addProject(project) {
+    function addProject(project, click) {
         const button = document.createElement('div');
         button.setAttribute('class', 'project button');
         button.setAttribute('id', project.projectId);
@@ -76,7 +78,7 @@ const View = (() => {
 
         buttons.push(button);
         projectList.appendChild(button);
-        button.click();
+        if (click) button.click();
     }
 
     //Add new task to DOM
@@ -109,6 +111,16 @@ const View = (() => {
         const deleteButton = taskItem.querySelector('.delete');
 
         //TODO: attach modals to details, edit and delete buttons here
+        detailsButton.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            taskDetailsForm.title.value = task.title;
+            taskDetailsForm.desc.value = task.desc;
+            taskDetailsForm.priority.value = task.priority;
+            taskDetailsForm.dueDate.value = task.dueDate;
+
+            taskDetailsModal.showModal();
+        });
 
         taskList.appendChild(taskItem);
     }
@@ -139,7 +151,7 @@ const View = (() => {
         const project = new Project(addProjectForm.title.value);
 
         Storage.addProject(project);
-        View.addProject(project);
+        View.addProject(project, true);
     });
 
     //edit-project modal
@@ -161,7 +173,7 @@ const View = (() => {
 
         projectList.innerHTML = '';
         const projects = Storage.getProjects();
-        projects.forEach(project => addProject(project));
+        projects.forEach(project => addProject(project, true));
     });
 
     //delete-project modal
@@ -225,6 +237,11 @@ const View = (() => {
 
         addTaskForm.reset();
         addTaskForm.projectId.value = projectId;
+    });
+
+    //task details modal
+    taskDetailsModal.addEventListener('click', e => {
+        closeModal(e, taskDetailsModal);
     });
 
     //functionality of default nav buttons
