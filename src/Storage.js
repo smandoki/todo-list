@@ -53,4 +53,17 @@ export default class Storage {
         projects[index].title = title;
         localStorage.setItem('projects', JSON.stringify(projects));
     }
+
+    static editTask(id, title, desc, priority, dueDate) {
+        const tasks = this.getTasks();
+        const index = tasks.findIndex(task => task.taskId === id);
+        const task = tasks[index];
+
+        task.title = title;
+        task.desc = desc;
+        task.priority = priority;
+        task.dueDate = dueDate;
+
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
 }

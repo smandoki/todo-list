@@ -1,6 +1,7 @@
 import Storage from './Storage';
 import Project from './types/Project';
 import Task from './types/Task';
+import moment from 'moment/moment';
 
 const View = (() => {
 
@@ -16,6 +17,12 @@ const View = (() => {
     const addTaskForm = document.querySelector('#add-task-form');
     const taskDetailsModal = document.querySelector('#task-details-modal');
     const taskDetailsForm = document.querySelector('#task-details-form');
+    const editTaskModal = document.querySelector('#edit-task-modal');
+    const editTaskForm = document.querySelector('#edit-task-form');
+    const deleteTaskModal = document.querySelector('#delete-task-modal');
+    const deleteTaskForm = document.querySelector('#delete-task-form');
+    const viewTodayButton = document.querySelector('#view-today-button');
+    const viewWeekButton = document.querySelector('#view-week-button');
 
     //Allow nav buttons to set active status onclick
     //and make main nav buttons hide add-task button
@@ -91,7 +98,7 @@ const View = (() => {
         taskItem.innerHTML = (
             `<div class="task-item-left">
                 <input type="checkbox" disabled>
-                ${task.title}
+                <div class="title">${task.title}</div>
             </div>
             <div class="task-item-right">
                 <button>Details</button>
@@ -110,7 +117,6 @@ const View = (() => {
         const editButton = taskItem.querySelector('.edit');
         const deleteButton = taskItem.querySelector('.delete');
 
-        //TODO: attach modals to details, edit and delete buttons here
         detailsButton.addEventListener('click', (e) => {
             e.preventDefault();
 
@@ -120,6 +126,28 @@ const View = (() => {
             taskDetailsForm.dueDate.value = task.dueDate;
 
             taskDetailsModal.showModal();
+        });
+
+        editButton.addEventListener('click', e => {
+            e.preventDefault();
+
+            editTaskForm.taskId.value = task.taskId;
+            editTaskForm.title.value = task.title;
+            editTaskForm.desc.value = task.desc;
+            editTaskForm.priority.value = task.priority;
+            editTaskForm.dueDate.value = task.dueDate;
+
+            editTaskModal.showModal();
+        });
+
+        deleteButton.addEventListener('click', e => {
+            e.preventDefault();
+
+            const message = deleteTaskModal.querySelector('.delete-message');
+            message.innerText = `Are you sure you want to delete ${task.title}`;
+            deleteTaskForm.taskId.value = task.taskId;
+
+            deleteTaskModal.showModal();
         });
 
         taskList.appendChild(taskItem);
@@ -244,11 +272,97 @@ const View = (() => {
         closeModal(e, taskDetailsModal);
     });
 
+    //edit task modal
+    editTaskModal.addEventListener('click', e => {
+        closeModal(e, editTaskModal);
+    });
+
+    editTaskForm.addEventListener('submit', () => {
+        const taskId = editTaskForm.taskId.value;
+        const title = editTaskForm.title.value;
+        const desc = editTaskForm.desc.value;
+        const priority = editTaskForm.priority.value;
+        const dueDate = editTaskForm.dueDate.value;
+
+        Storage.editTask(
+            taskId,
+            title,
+            desc,
+            priority,
+            dueDate
+        );
+
+        const taskItem = document.getElementById(taskId);
+        const taskTitle = taskItem.querySelector('.title');
+        const taskDueDate = taskItem.querySelector('.date');
+        taskTitle.innerText = title;
+        taskDueDate.innerText = dueDate;
+
+        taskItem.classList.remove('low');
+        taskItem.classList.remove('medium');
+        taskItem.classList.remove('high');
+        taskItem.classList.add(priority);
+    });
+
+    const cancelEditTask = editTaskModal.querySelector('.cancel-button');
+    cancelEditTask.addEventListener('click', e => {
+        e.preventDefault();
+        editTaskModal.close();
+    });
+
+    //delete task modal
+    deleteTaskModal.addEventListener('click', e => {
+        closeModal(e, deleteTaskModal);
+    })
+
+    const cancelTaskDelete = deleteTaskModal.querySelector('.delete-cancel-button');
+    cancelTaskDelete.addEventListener('click', e => {
+        e.preventDefault();
+        deleteTaskModal.close();
+    });
+
+    deleteTaskForm.addEventListener('submit', () => {
+        const taskId = deleteTaskForm.taskId.value;
+        const taskItem = document.getElementById(taskId);
+
+        taskItem.parentElement.removeChild(taskItem);
+        Storage.deleteTask(taskId);
+    });
+
     //functionality of default nav buttons
     viewAllButton.addEventListener('click', () => {
         taskList.innerHTML = '';
 
         const tasks = Storage.getTasks();
+        tasks.forEach(task => addTask(task));
+    });
+
+    viewTodayButton.addEventListener('click', () => {
+        const today = new Date();
+        const tasks = Storage.getTasks().filter(task => {
+            const date = new Date(task.dueDate);
+
+            return (
+                today.getDate() === date.getDate() &&
+                today.getMonth() === date.getMonth() &&
+                today.getFullYear() === date.getFullYear()
+            );
+        });
+
+        taskList.innerHTML = '';
+        tasks.forEach(task => addTask(task));
+    });
+
+    viewWeekButton.addEventListener('click', () => {
+        const currentDate = moment();
+
+        const tasks = Storage.getTasks().filter(task => {
+            const date = moment(task.dueDate);
+
+            return date.isSame(currentDate, 'week');
+        });
+
+        taskList.innerHTML = '';
         tasks.forEach(task => addTask(task));
     });
 
