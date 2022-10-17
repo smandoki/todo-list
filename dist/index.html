@@ -67,5 +67,47 @@
             </div>
         </form>
     </dialog>
+
+    <dialog class="modal" id="delete-project-modal">
+        <h2 class="modal-header delete-modal-header">Delete Project</h2>
+
+        <form method="dialog" autocomplete="off" id="delete-project-form">
+            <input type="text" id="projectId" hidden>
+            <h3 class="delete-message"></h3>
+            <div class="form-buttons">
+                <button class="delete-cancel-button">Cancel</button>
+                <button class="delete-submit-button" type="submit">Delete</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog class="modal" id="add-task-modal">
+        <h2 class="modal-header">Add Task</h2>
+
+        <form method="dialog" autocomplete="off" id="add-task-form">
+            <input type="text" name="projectId" hidden>
+
+            <label for="title">Title</label>
+            <input type="text" name="title" required>
+
+            <label for="desc">Description</label>
+            <textarea name="desc"cols="30" rows="4"></textarea>
+
+            <label for="priority">Priority</label>
+            <select name="priority">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+
+            <label for="dueDate">Due Date</label>
+            <input type="date" name="dueDate" required>
+
+            <div class="form-buttons">
+                <button class="cancel-button">Cancel</button>
+                <button class="submit-button" type="submit">Add</button>
+            </div>
+        </form>
+    </dialog>
 </body>
 </html>

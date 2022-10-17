@@ -11,6 +11,9 @@ const View = (() => {
     const viewAllButton = document.querySelector('#view-all-button');
     const editProjectModal = document.querySelector('#edit-project-modal');
     const editProjectForm = document.querySelector('#edit-project-form');
+    const deleteProjectForm = document.querySelector('#delete-project-form');
+    const deleteProjectModal = document.querySelector('#delete-project-modal');
+    const addTaskForm = document.querySelector('#add-task-form');
 
     //Allow nav buttons to set active status onclick
     //and make main nav buttons hide add-task button
@@ -42,6 +45,11 @@ const View = (() => {
         button.addEventListener('click', () => {
             setActive(button);
             addTaskButton.classList.remove('hidden');
+            addTaskForm.projectId.value = project.projectId;
+
+            const tasks = Storage.getProjectTasks(project.projectId);
+            taskList.innerHTML = '';
+            tasks.forEach(task => addTask(task));
         });
 
         const editButton = button.querySelector('.edit');
@@ -58,13 +66,17 @@ const View = (() => {
         
         deleteButton.addEventListener('click', (e) => {
             e.stopPropagation();
-            Storage.deleteProject(project.projectId);
-            button.parentElement.removeChild(button);
-            viewAllButton.click();
+
+            deleteProjectForm.projectId.value = project.projectId;
+            const message = deleteProjectForm.querySelector('.delete-message');
+            message.innerText = `Are you sure you want to delete ${project.title}?`;
+
+            deleteProjectModal.showModal();
         });
 
         buttons.push(button);
         projectList.appendChild(button);
+        button.click();
     }
 
     //Add new task to DOM
@@ -81,7 +93,7 @@ const View = (() => {
             </div>
             <div class="task-item-right">
                 <button>Details</button>
-                ${task.dueDate}
+                <div class="date">${task.dueDate}</div>
                 <div>
                     <i class="bi bi-pencil-square edit"></i>
                     <i class="bi bi-trash delete"></i>
@@ -106,10 +118,14 @@ const View = (() => {
     const addProjectModal = document.querySelector('#add-project-modal');
     const addProjectButton = document.querySelector('#add-project-button');
 
-    let cancelButton = addProjectModal.querySelector('.cancel-button');
-    cancelButton.addEventListener('click', () => addProjectModal.close());
+    const addProjectCancel = addProjectModal.querySelector('.cancel-button');
+    addProjectCancel.addEventListener('click', (e) => {
+        addProjectModal.close();
+        e.preventDefault();
+    });
 
     addProjectButton.addEventListener('click', () => {
+        addProjectForm.reset();
         addProjectModal.showModal();
     });
 
@@ -124,13 +140,14 @@ const View = (() => {
 
         Storage.addProject(project);
         View.addProject(project);
-
-        addProjectForm.reset();
     });
 
     //edit-project modal
-    cancelButton = editProjectModal.querySelector('.cancel-button');
-    cancelButton.addEventListener('click', () => editProjectModal.close());
+    const editProjectCancel = editProjectModal.querySelector('.cancel-button');
+    editProjectCancel.addEventListener('click', (e) => {
+        editProjectModal.close();
+        e.preventDefault();
+    });
 
     editProjectModal.addEventListener('click', e => {
         closeModal(e, editProjectModal);
@@ -147,11 +164,76 @@ const View = (() => {
         projects.forEach(project => addProject(project));
     });
 
+    //delete-project modal
+    deleteProjectModal.addEventListener('click', e => {
+        closeModal(e, deleteProjectModal);
+    });
+
+    deleteProjectForm.addEventListener('submit', () => {
+        const projectId = deleteProjectForm.projectId.value;
+        const project = document.getElementById(projectId);
+
+        Storage.deleteProject(projectId);
+        project.parentElement.removeChild(project);
+
+        viewAllButton.click();
+    });
+
+    const cancelProjectDelete = deleteProjectModal.querySelector('.delete-cancel-button');
+    cancelProjectDelete.addEventListener('click', (e) => {
+        deleteProjectModal.close();
+        e.preventDefault();
+    });
+
     function closeModal(e, modal) {
         if (e.target === modal) {
             modal.close();
         }
     }
+
+    //HANDLE ADD TASK MODALS BELOW
+    const addTaskModal = document.querySelector('#add-task-modal');
+    const cancelAddTask = addTaskModal.querySelector('.cancel-button');
+
+    addTaskModal.addEventListener('click', (e) => {
+        closeModal(e, addTaskModal);
+    });
+
+    addTaskButton.addEventListener('click', () => addTaskModal.showModal());
+    cancelAddTask.addEventListener('click', (e) => {
+        e.preventDefault();
+        addTaskModal.close();
+    });
+
+    addTaskForm.addEventListener('submit', () => {
+        const projectId = addTaskForm.projectId.value;
+        const title = addTaskForm.title.value;
+        const desc = addTaskForm.desc.value;
+        const priority = addTaskForm.priority.value;
+        const dueDate = addTaskForm.dueDate.value;
+
+        const task = new Task(
+            projectId,
+            title,
+            desc,
+            priority,
+            dueDate
+        );
+
+        Storage.addTask(task);
+        addTask(task);
+
+        addTaskForm.reset();
+        addTaskForm.projectId.value = projectId;
+    });
+
+    //functionality of default nav buttons
+    viewAllButton.addEventListener('click', () => {
+        taskList.innerHTML = '';
+
+        const tasks = Storage.getTasks();
+        tasks.forEach(task => addTask(task));
+    });
 
     return {
         addProject,

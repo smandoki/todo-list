@@ -126,7 +126,7 @@ main {
     display: flex;
     justify-content: space-between;
     background-color: var(--aside-background-color);
-    padding: 16px;
+    padding: 12px 16px;
     align-items: center;
 }
 
@@ -147,6 +147,10 @@ main {
     gap: 10px;
 }
 
+.task-item-right .date {
+    width: 80px;
+}
+
 .task-item button {
     background-color: var(--aside-background-color);
     padding: 5px 10px;
@@ -162,15 +166,15 @@ main {
 }
 
 .low {
-    border-left: 4px solid green;
+    border-left: 5px solid green;
 }
 
 .medium {
-    border-left: 4px solid orange;
+    border-left: 5px solid orange;
 }
 
 .high {
-    border-left: 4px solid red;
+    border-left: 5px solid red;
 }
 
 .modal {
@@ -218,6 +222,7 @@ i:hover {
     color: var(--dark-grey);
     font-size: 1.05rem;
     transition: all 0.2s ease-in-out;
+    margin-bottom: 10px;
 }
 
 .modal form input:focus {
@@ -237,6 +242,7 @@ i:hover {
     border: 1px solid lightgray;
     border-radius: 5px;
     transition: all 0.2s ease-in-out;
+    outline: none;
 }
 
 .form-buttons button:hover, .task-item {
@@ -261,4 +267,50 @@ i:hover {
 .form-buttons .submit-button:hover {
     background-color: #e97100;
     border-color: #e97100;
+}
+
+.delete-modal-header {
+    background: linear-gradient(90deg, rgba(191,0,0,1) 0%, rgba(253,29,29,1) 50%, rgba(255,83,34,1) 100%); 
+}
+
+.form-buttons .delete-submit-button {
+    background-color: #d00808;
+    border-color: #d00808;
+    color: white;
+}
+
+.form-buttons .delete-submit-button:hover {
+    background-color: #bb0606;
+    border-color: #bb0606;
+}
+
+.delete-cancel-button {
+    color: var(--dark-grey)
+}
+
+.delete-cancel-button:hover {
+    border-color: black;
+}
+
+textarea {
+    outline: none;
+    border: 1px solid lightgray;
+    padding: 4px;
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+    margin-bottom: 10px;
+    color: var(--dark-grey);
+}
+
+textarea:focus {
+    border-color: var(--accent-color);
+}
+
+select {
+    margin-bottom: 10px;
+    background-color: white;
+    padding: 10px 8px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    color: var(--dark-grey);
 }
