@@ -130,6 +130,18 @@ main {
     align-items: center;
 }
 
+.task-item:hover {
+    background-color: #eeeded;
+}
+
+.task-item:active {
+    background-color: #ebe9e9;
+}
+
+.strike {
+    text-decoration: line-through;
+}
+
 .task-item-left {
     display: flex;
     gap: 10px;

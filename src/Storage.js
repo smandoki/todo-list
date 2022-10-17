@@ -66,4 +66,13 @@ export default class Storage {
 
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
+
+    static setComplete(id, completed) {
+        const tasks = this.getTasks();
+        const index = tasks.findIndex(task => task.taskId === id);
+        const task = tasks[index];
+        task.completed = completed;
+
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
 }

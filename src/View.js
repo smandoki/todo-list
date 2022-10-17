@@ -96,7 +96,7 @@ const View = (() => {
 
         taskItem.innerHTML = (
             `<div class="task-item-left">
-                <input type="checkbox" disabled>
+                <input type="checkbox" class="checkbox" disabled>
                 <div class="title">${task.title}</div>
             </div>
             <div class="task-item-right">
@@ -115,9 +115,15 @@ const View = (() => {
         const detailsButton = taskItem.querySelector('button');
         const editButton = taskItem.querySelector('.edit');
         const deleteButton = taskItem.querySelector('.delete');
+        const title = taskItem.querySelector('.title');
+
+        if (checkbox.checked) {
+            title.classList.add('strike');
+        }
 
         detailsButton.addEventListener('click', (e) => {
             e.preventDefault();
+            e.stopPropagation();
 
             taskDetailsForm.title.value = task.title;
             taskDetailsForm.desc.value = task.desc;
@@ -129,6 +135,7 @@ const View = (() => {
 
         editButton.addEventListener('click', e => {
             e.preventDefault();
+            e.stopPropagation();
 
             editTaskForm.taskId.value = task.taskId;
             editTaskForm.title.value = task.title;
@@ -141,12 +148,22 @@ const View = (() => {
 
         deleteButton.addEventListener('click', e => {
             e.preventDefault();
+            e.stopPropagation();
 
             const message = deleteTaskModal.querySelector('.delete-message');
             message.innerText = `Are you sure you want to delete ${task.title}`;
             deleteTaskForm.taskId.value = task.taskId;
 
             deleteTaskModal.showModal();
+        });
+
+        taskItem.addEventListener('click', () => {
+            const checkbox = taskItem.querySelector('.checkbox');
+            checkbox.checked = !checkbox.checked;
+
+            title.classList.toggle('strike');
+
+            Storage.setComplete(task.taskId, checkbox.checked);
         });
 
         taskList.appendChild(taskItem);
