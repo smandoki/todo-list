@@ -1,11 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
+import { auth, provider } from '../../firebase';
+import { signInWithPopup, signInAnonymously } from 'firebase/auth';
 
 function Login() {
   return (
     <StyledLogin>
       <h2>Sign In</h2>
-      <LoginBtn>Continue as guest</LoginBtn>
+      <LoginBtn onClick={() => signInAnonymously(auth)}>
+        Continue as guest
+      </LoginBtn>
 
       <LineBreak>
         <hr />
@@ -13,7 +17,7 @@ function Login() {
         <hr />
       </LineBreak>
 
-      <LoginBtn>
+      <LoginBtn onClick={() => signInWithPopup(auth, provider)}>
         <i className="bi bi-google"></i>
         Sign in with Google
       </LoginBtn>
@@ -45,6 +49,7 @@ const LoginBtn = styled.button`
   border: none;
   border-radius: 4px;
   font-size: 1.1rem;
+  outline: 1px solid #c0c0c0;
 
   i {
     margin-right: 10px;

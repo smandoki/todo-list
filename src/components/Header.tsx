@@ -1,12 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 function Header() {
+  const [user] = useAuthState(auth);
+
   return (
     <StyledHeader>
       <Icon className="bi bi-check2-circle" />
       <h1>Todo List</h1>
-      <LogoutBtn>Sign Out</LogoutBtn>
+      {user && <LogoutBtn onClick={() => signOut(auth)}>Sign Out</LogoutBtn>}
     </StyledHeader>
   );
 }
