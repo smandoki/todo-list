@@ -2,27 +2,31 @@ import React from 'react';
 import styled from 'styled-components';
 import { auth, provider } from '../../firebase';
 import { signInWithPopup, signInAnonymously } from 'firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 function Login() {
-  return (
-    <StyledLogin>
-      <h2>Sign In</h2>
-      <LoginBtn onClick={() => signInAnonymously(auth)}>
-        Continue as guest
-      </LoginBtn>
+  const [user] = useAuthState(auth);
 
-      <LineBreak>
-        <hr />
-        or
-        <hr />
-      </LineBreak>
+  if (!user)
+    return (
+      <StyledLogin>
+        <h2>Sign In</h2>
+        <LoginBtn onClick={() => signInAnonymously(auth)}>
+          Continue as guest
+        </LoginBtn>
 
-      <LoginBtn onClick={() => signInWithPopup(auth, provider)}>
-        <i className="bi bi-google"></i>
-        Sign in with Google
-      </LoginBtn>
-    </StyledLogin>
-  );
+        <LineBreak>
+          <hr />
+          or
+          <hr />
+        </LineBreak>
+
+        <LoginBtn onClick={() => signInWithPopup(auth, provider)}>
+          <i className="bi bi-google"></i>
+          Sign in with Google
+        </LoginBtn>
+      </StyledLogin>
+    );
 }
 
 export default Login;
