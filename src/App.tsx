@@ -3,12 +3,19 @@ import styled from 'styled-components';
 
 import Aside from './components/Aside';
 import Header from './components/Header';
+import Login from './components/Login';
+import Tasks from './components/Tasks';
 
 function App() {
+  const user = false;
+
   return (
     <StyledApp>
       <Header />
-      <Aside />
+
+      {user && <Aside />}
+      {user && <Tasks />}
+      {!user && <Login />}
     </StyledApp>
   );
 }

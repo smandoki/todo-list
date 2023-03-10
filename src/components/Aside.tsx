@@ -28,7 +28,7 @@ function Aside() {
 export default Aside;
 
 const StyledAside = styled.aside`
-  background-color: #1f222a;
+  background-color: #22252e;
   padding: 40px 20px;
   display: flex;
   flex-direction: column;
