@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { Link } from 'react-router-dom';
 
 function Header() {
   const [user] = useAuthState(auth);
@@ -11,7 +12,11 @@ function Header() {
     <StyledHeader>
       <Icon className="bi bi-check2-circle" />
       <h1>Todo List</h1>
-      {user && <LogoutBtn onClick={() => signOut(auth)}>Sign Out</LogoutBtn>}
+      {user && (
+        <LogoutBtn to="/login" onClick={() => signOut(auth)}>
+          Sign Out
+        </LogoutBtn>
+      )}
     </StyledHeader>
   );
 }
@@ -31,12 +36,13 @@ const Icon = styled.i`
   font-size: 2rem;
 `;
 
-const LogoutBtn = styled.button`
+const LogoutBtn = styled(Link)`
   padding: 8px 16px;
   margin-left: auto;
   background-color: #34373f;
   border: none;
   border-radius: 4px;
+  text-decoration: none;
 
   :hover {
     filter: brightness(85%);

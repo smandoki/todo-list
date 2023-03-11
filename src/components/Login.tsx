@@ -2,16 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import { auth, provider } from '../../firebase';
 import { signInWithPopup, signInAnonymously } from 'firebase/auth';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { Link } from 'react-router-dom';
+import Header from './Header';
 
 function Login() {
-  const [user] = useAuthState(auth);
-
-  if (!user)
-    return (
+  return (
+    <>
+      <Header />
       <StyledLogin>
         <h2>Sign In</h2>
-        <LoginBtn onClick={() => signInAnonymously(auth)}>
+        <LoginBtn to="/all" onClick={() => signInAnonymously(auth)}>
           Continue as guest
         </LoginBtn>
 
@@ -21,12 +21,13 @@ function Login() {
           <hr />
         </LineBreak>
 
-        <LoginBtn onClick={() => signInWithPopup(auth, provider)}>
+        <LoginBtn to="/all" onClick={() => signInWithPopup(auth, provider)}>
           <i className="bi bi-google"></i>
           Sign in with Google
         </LoginBtn>
       </StyledLogin>
-    );
+    </>
+  );
 }
 
 export default Login;
@@ -47,13 +48,14 @@ const StyledLogin = styled.div`
   text-align: center;
 `;
 
-const LoginBtn = styled.button`
+const LoginBtn = styled(Link)`
   padding: 16px 32px;
   background-color: #34373f;
   border: none;
   border-radius: 4px;
   font-size: 1.1rem;
   outline: 1px solid #c0c0c0;
+  text-decoration: none;
 
   i {
     margin-right: 10px;

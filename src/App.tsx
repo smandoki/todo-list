@@ -2,22 +2,25 @@ import React from 'react';
 import styled from 'styled-components';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Aside from './components/Aside';
-import Header from './components/Header';
 import Login from './components/Login';
-import Tasks from './components/Tasks';
+import AllTasks from './components/AllTasks';
+import Layout from './components/Layout';
 
 function App() {
   const [user] = useAuthState(auth);
 
   return (
     <StyledApp>
-      <Header />
-
-      {user && <Aside />}
-      {user && <Tasks />}
-      {!user && <Login />}
+      <BrowserRouter>
+        <Routes>
+          <Route path="login" element={<Login />} />
+          <Route path="/" element={<Layout />}>
+            <Route path="all" element={<AllTasks />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </StyledApp>
   );
 }
