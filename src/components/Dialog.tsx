@@ -52,4 +52,18 @@ const StyledDialog = styled.dialog`
     flex-direction: column;
     width: 300px;
   }
+
+  select {
+    padding: 8px;
+    color: black;
+    margin-bottom: 20px;
+  }
+
+  option {
+    color: black;
+  }
+
+  label {
+    margin-bottom: 4px;
+  }
 `;

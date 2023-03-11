@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
 import AllTasks from './components/AllTasks';
 import Layout from './components/Layout';
+import Project from './components/Project';
 
 function App() {
   const [user] = useAuthState(auth);
@@ -18,6 +19,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="/" element={<Layout />}>
             <Route path="all" element={<AllTasks />} />
+            <Route path="project/:id" element={<Project />} />
           </Route>
         </Routes>
       </BrowserRouter>

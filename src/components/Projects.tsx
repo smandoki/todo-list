@@ -14,6 +14,7 @@ import {
 import Dialog from './Dialog';
 import AddProject from './AddProject';
 import EditProject from './EditProject';
+import { Link } from 'react-router-dom';
 
 interface Project {
   id: string;
@@ -72,7 +73,7 @@ function Projects() {
       <LineBreak />
 
       {projects.map((project) => (
-        <StyledLink key={project.id}>
+        <StyledLink to={`project/${project.id}`} key={project.id}>
           <ProjectName>{project.name}</ProjectName>
           <EditIcon
             className="bi bi-pencil-square"
@@ -125,12 +126,13 @@ const LineBreak = styled.hr`
   color: #2f313e;
 `;
 
-const StyledLink = styled.a`
+const StyledLink = styled(Link)`
   background-color: #34373f;
   padding: 12px;
   border-radius: 4px;
   display: flex;
   gap: 12px;
+  text-decoration: none;
 
   :hover {
     filter: brightness(85%);
@@ -174,6 +176,7 @@ const AddProjectButton = styled.button`
   border-radius: 4px;
   text-decoration: underline;
   background-color: #22252e;
+  outline: 1px solid #34373f;
 
   :hover {
     cursor: pointer;

@@ -1,21 +1,22 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Projects from './Projects';
 
 function Aside() {
   return (
     <StyledAside>
-      <StyledLink>
+      <StyledLink to="all">
         <i className="bi bi-calendar3"></i>
         All
       </StyledLink>
 
-      <StyledLink>
+      <StyledLink to="today">
         <i className="bi bi-calendar3"></i>
         Today
       </StyledLink>
 
-      <StyledLink>
+      <StyledLink to="week">
         <i className="bi bi-calendar4-week"></i>
         Week
       </StyledLink>
@@ -35,12 +36,13 @@ const StyledAside = styled.aside`
   gap: 10px;
 `;
 
-const StyledLink = styled.a`
+const StyledLink = styled(Link)`
   background-color: #34373f;
   padding: 12px;
   border-radius: 4px;
   display: flex;
   gap: 10px;
+  text-decoration: none;
 
   :hover {
     filter: brightness(85%);
