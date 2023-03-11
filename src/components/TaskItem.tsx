@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const TaskItem = styled.div`
-  margin-top: 20px;
+  margin-top: 12px;
   background-color: #34373f;
   padding: 20px;
   border-left: 4px solid;

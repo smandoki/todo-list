@@ -13,6 +13,7 @@ import styled from 'styled-components';
 import { auth, db } from '../../firebase';
 import AddTask from './AddTask';
 import Dialog from './Dialog';
+import EditTask from './EditTask';
 import { TaskItem } from './TaskItem';
 
 interface Task {
@@ -25,12 +26,20 @@ interface Task {
 function Project() {
   const { id } = useParams();
   const addTaskDialogRef = useRef<HTMLDialogElement>(null);
+  const editTaskDialogRef = useRef<HTMLDialogElement>(null);
   const [opened, setOpened] = useState(false);
   const [user] = useAuthState(auth);
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [taskToEdit, setTaskToEdit] = useState<Task>({
+    title: '',
+    priority: 'low',
+    date: '',
+    id: '',
+  });
 
   const closeDialog = () => {
     addTaskDialogRef.current?.close();
+    editTaskDialogRef.current?.close();
     setOpened(false);
   };
 
@@ -83,6 +92,12 @@ function Project() {
     }
   };
 
+  const openEditTaskDialog = (task: Task) => {
+    setOpened(true);
+    setTaskToEdit({ ...task });
+    editTaskDialogRef.current?.showModal();
+  };
+
   return (
     <Container>
       <h2>Tasks</h2>
@@ -92,7 +107,10 @@ function Project() {
         <TaskItem color={getColor(task.priority)}>
           {task.title}
           <div className="date">{task.date}</div>
-          <i className="bi bi-pencil-square"></i>
+          <i
+            className="bi bi-pencil-square"
+            onClick={() => openEditTaskDialog(task)}
+          ></i>
           <i className="bi bi-trash3" onClick={() => deleteTask(task.id)}></i>
         </TaskItem>
       ))}
@@ -101,6 +119,10 @@ function Project() {
 
       <Dialog dialogRef={addTaskDialogRef} closeDialog={closeDialog}>
         <AddTask closeDialog={closeDialog} opened={opened} pid={id} />
+      </Dialog>
+
+      <Dialog dialogRef={editTaskDialogRef} closeDialog={closeDialog}>
+        <EditTask closeDialog={closeDialog} task={taskToEdit} opened={opened} />
       </Dialog>
     </Container>
   );
