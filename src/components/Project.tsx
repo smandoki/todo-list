@@ -1,4 +1,11 @@
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  where,
+} from 'firebase/firestore';
 import React, { useEffect, useRef, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useParams } from 'react-router-dom';
@@ -6,11 +13,12 @@ import styled from 'styled-components';
 import { auth, db } from '../../firebase';
 import AddTask from './AddTask';
 import Dialog from './Dialog';
+import { TaskItem } from './TaskItem';
 
 interface Task {
   title: string;
   priority: 'low' | 'medium' | 'high';
-  date: Date;
+  date: string;
   id: string;
 }
 
@@ -56,13 +64,37 @@ function Project() {
     return () => unsubscribe();
   }, [user, id]);
 
+  const getColor = (priority: string) => {
+    switch (priority) {
+      case 'high':
+        return 'lightcoral';
+      case 'medium':
+        return 'lightsalmon';
+      default:
+        return 'lightgreen';
+    }
+  };
+
+  const deleteTask = (id: string) => {
+    try {
+      deleteDoc(doc(db, 'todos', id));
+    } catch (e) {
+      console.error('Error adding document: ', e);
+    }
+  };
+
   return (
     <Container>
       <h2>Tasks</h2>
       <LineBreak />
 
       {tasks.map((task) => (
-        <p>{task.title}</p>
+        <TaskItem color={getColor(task.priority)}>
+          {task.title}
+          <div className="date">{task.date}</div>
+          <i className="bi bi-pencil-square"></i>
+          <i className="bi bi-trash3" onClick={() => deleteTask(task.id)}></i>
+        </TaskItem>
       ))}
 
       <AddTaskButton onClick={openAddTaskDialog}>Add Task+</AddTaskButton>
