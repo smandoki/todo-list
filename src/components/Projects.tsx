@@ -1,23 +1,113 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import styled from 'styled-components';
+import { auth, db } from '../../firebase';
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  deleteDoc,
+  doc,
+} from 'firebase/firestore';
+
+import Dialog from './Dialog';
+import AddProject from './AddProject';
+import EditProject from './EditProject';
+
+interface Project {
+  id: string;
+  name: string;
+}
 
 function Projects() {
+  const [user] = useAuthState(auth);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const addProjectDialogRef = useRef<HTMLDialogElement>(null);
+  const editProjectDialogRef = useRef<HTMLDialogElement>(null);
+  const [projectToEdit, setProjectToEdit] = useState<Project>({
+    id: '',
+    name: '',
+  });
+  const [opened, setOpened] = useState(false);
+
+  //load projects from firestore on user login
+  useEffect(() => {
+    if (!user) return;
+
+    const projectsRef = collection(db, 'projects');
+    const q = query(projectsRef, where('uid', '==', user.uid));
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const projects: Project[] = [];
+
+      querySnapshot.forEach((doc) => {
+        projects.push({ id: doc.id, name: doc.data().name });
+      });
+
+      setProjects(projects);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
+  const closeDialog = () => {
+    addProjectDialogRef.current?.close();
+    editProjectDialogRef.current?.close();
+    setOpened(false);
+  };
+
+  const deleteProject = (id: string) => {
+    deleteDoc(doc(db, 'projects', id));
+  };
+
+  const editProject = (project: Project) => {
+    setProjectToEdit({ ...project });
+    editProjectDialogRef.current?.showModal();
+  };
+
   return (
     <StyledProjects>
       <p>Projects</p>
       <LineBreak />
 
-      <StyledLink>
-        <ProjectName>Project Name</ProjectName>
-        <EditIcon className="bi bi-pencil-square"></EditIcon>
-        <i className="bi bi-trash3"></i>
-      </StyledLink>
+      {projects.map((project) => (
+        <StyledLink key={project.id}>
+          <ProjectName>{project.name}</ProjectName>
+          <EditIcon
+            className="bi bi-pencil-square"
+            onClick={() => {
+              editProject(project);
+              setOpened(true);
+            }}
+          ></EditIcon>
+          <i
+            className="bi bi-trash3"
+            onClick={() => deleteProject(project.id)}
+          ></i>
+        </StyledLink>
+      ))}
 
-      <StyledLink>
-        <ProjectName>Project Name</ProjectName>
-        <EditIcon className="bi bi-pencil-square"></EditIcon>
-        <i className="bi bi-trash3"></i>
-      </StyledLink>
+      <AddProjectButton
+        onClick={() => {
+          addProjectDialogRef.current?.showModal();
+          setOpened(true);
+        }}
+      >
+        Add Project+
+      </AddProjectButton>
+
+      <Dialog dialogRef={addProjectDialogRef} closeDialog={closeDialog}>
+        <AddProject closeDialog={closeDialog} opened={opened} />
+      </Dialog>
+
+      <Dialog dialogRef={editProjectDialogRef} closeDialog={closeDialog}>
+        <EditProject
+          closeDialog={closeDialog}
+          project={projectToEdit}
+          opened={opened}
+        />
+      </Dialog>
     </StyledProjects>
   );
 }
@@ -52,11 +142,18 @@ const StyledLink = styled.a`
 
   i:hover {
     cursor: pointer;
-    color: lightskyblue;
   }
 
   i:active {
     transform: scale(115%);
+  }
+
+  .bi-pencil-square:hover {
+    color: lightskyblue;
+  }
+
+  .bi-trash3:hover {
+    color: lightcoral;
   }
 `;
 
@@ -69,4 +166,17 @@ const ProjectName = styled.p`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+`;
+
+const AddProjectButton = styled.button`
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  text-decoration: underline;
+  background-color: #22252e;
+
+  :hover {
+    cursor: pointer;
+    color: lightskyblue;
+  }
 `;
