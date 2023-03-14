@@ -5,7 +5,7 @@ import { auth } from '../firebase';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Login from './components/Login';
-import AllTasks from './components/AllTasks';
+import Tasks from './components/Tasks';
 import Layout from './components/Layout';
 import Project from './components/Project';
 
@@ -18,7 +18,7 @@ function App() {
         <Routes>
           <Route path="login" element={<Login />} />
           <Route path="/" element={<Layout />}>
-            <Route path="all" element={<AllTasks />} />
+            <Route path="/:filter" element={<Tasks />} />
             <Route path="project/:id" element={<Project />} />
           </Route>
         </Routes>

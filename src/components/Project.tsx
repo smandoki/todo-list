@@ -104,7 +104,7 @@ function Project() {
       <LineBreak />
 
       {tasks.map((task) => (
-        <TaskItem color={getColor(task.priority)}>
+        <TaskItem key={task.id} color={getColor(task.priority)}>
           {task.title}
           <div className="date">{task.date}</div>
           <i
